@@ -1,0 +1,5 @@
+input:
+  kafka:
+    addresses: [localhost:9092]
+    topics: [test-user]
+    consumer_group: test-user-v8
