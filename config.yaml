@@ -1,0 +1,96 @@
+http:
+  enabled: true
+  address: 0.0.0.0:4195
+  root_path: /bento
+  debug_endpoints: false
+  cert_file: ""
+  key_file: ""
+  cors:
+    enabled: false
+    allowed_origins: []
+  basic_auth:
+    enabled: false
+    realm: restricted
+    username: ""
+    password_hash: ""
+    algorithm: sha256
+    salt: ""
+input:
+  label: ""
+  kafka:
+    addresses:
+      - localhost:9092
+    consumer_group: "test-user-v8"
+    topics:
+      - test-user
+    target_version: 2.1.0 # No default (optional)
+    checkpoint_limit: 1 # ensures ordering of messages
+    auto_replay_nacks: true
+    batching:
+      count: 10
+      period: 1s
+buffer:
+  none: {}
+pipeline:
+  threads: -1
+  processors:
+    - log:
+        level: INFO
+        message: incoming kafka message
+        fields_mapping: |
+          root.key = metadata("kafka_key")
+          root.value = this
+    - group_by_value:
+        value: ${! metadata("kafka_key") }
+    - select_parts:
+        parts: [-1]
+    - log:
+        level: INFO
+        message: filtered kafka message
+        fields_mapping: |
+          root.key = metadata("kafka_key")
+          root.value = this
+output:
+  sql_insert:
+    driver: postgres
+    dsn: postgresql://user:password@localhost:5432/db?sslmode=disable
+    table: test_users
+    columns: [ id, age ]
+    suffix: "ON CONFLICT (id) DO UPDATE SET age = EXCLUDED.age;"
+    args_mapping: |
+      root = [
+        metadata("kafka_key"),
+        this,
+      ]
+    batching:
+      count: 10
+      period: 1s
+input_resources: []
+processor_resources: []
+output_resources: []
+cache_resources: []
+rate_limit_resources: []
+logger:
+  level: TRACE
+  format: logfmt
+  add_timestamp: false
+  level_name: level
+  timestamp_name: time
+  message_name: msg
+  static_fields:
+    '@service': bento
+  file:
+    path: ""
+    rotate: false
+    rotate_max_age_days: 0
+  log_all_errors: false
+metrics:
+  prometheus: {}
+  mapping: ""
+tracer:
+  none: {}
+shutdown_delay: 0s
+shutdown_timeout: 20s
+error_handling:
+  strategy: none
+tests: []
