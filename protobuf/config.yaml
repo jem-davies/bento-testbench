@@ -1,0 +1,13 @@
+input: 
+  file:
+    paths: ["./msg.json"]
+
+pipeline:
+  processors:
+    - protobuf:
+        operator: from_json
+        message: testing.Person
+        import_paths: [ test.proto ]
+
+output:
+  stdout: {}
