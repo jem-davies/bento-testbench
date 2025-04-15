@@ -1,0 +1,8 @@
+input:
+  stdin: {}
+
+output:
+  amqp_1:
+    urls:
+      - amqp://guest:guest@localhost:5672/
+    target_address: foo

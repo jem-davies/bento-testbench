@@ -1,0 +1,8 @@
+input:
+  amqp_1:
+    urls:
+      - amqp://guest:guest@localhost:5672/
+    source_address: foo
+
+output:
+  stdout: {}
