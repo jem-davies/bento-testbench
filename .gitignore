@@ -1,2 +1,3 @@
 .tmp
 postgres/postgres_data
+rabbitmq/rabbitmq_data

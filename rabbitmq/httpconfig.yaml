@@ -1,0 +1,18 @@
+input:
+  http_server:
+    path: /post
+    timeout: 1s
+
+pipeline:
+  processors:
+  # need to delete the metadata because it is causing an issue with amqp or sommat
+  - mapping: |
+      meta = deleted()
+
+output:
+  amqp_1:
+    urls:
+      - amqp://guest:guest@localhost:5672
+    target_address: foo
+    metadata: 
+      exclude_prefixes: []
