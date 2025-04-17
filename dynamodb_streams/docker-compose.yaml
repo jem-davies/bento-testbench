@@ -1,0 +1,14 @@
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack-pro:latest
+    ports: 
+      - 4566:4566
+      - 4510-4559:4510-4559
+    environment:
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:?}
+      - EXTENSION_AUTO_INSTALL=localstack-extension-terraform-init
+    volumes:
+      - ./main.tf:/etc/localstack/init/ready.d/main.tf
+      - ./volume:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
