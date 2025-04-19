@@ -1,6 +1,6 @@
-# Fetches an image (e.g. 'profile.jpeg') from AWS S3 using the key provided in the
-# incoming message's metadata, and archives it together with the metadata in a .zip
-# file containing two files: 'image.jpeg' and 'metadata.json'.
+# Fetches an image (e.g. 'profile.jpeg') from AWS S3 using the key provided in 
+# the incoming message's metadata, and archives it together with the metadata in
+# file containing two files: 'image.jpeg' and 'metadata.json'. a .zip
 
 input:
   stdin: {} # {"metadata": {"imageKey": "profile.jpeg"}}
