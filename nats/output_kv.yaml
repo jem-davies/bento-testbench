@@ -1,0 +1,13 @@
+input:
+  generate:
+    mapping: |
+        root = {"key":"foo", "value": "hello world"}
+    count: 1
+    batch_size: 1
+
+output:
+  nats_kv:
+    urls:
+      - 0.0.0.0:4222
+    bucket: my-kv
+    key: ${! this.key }

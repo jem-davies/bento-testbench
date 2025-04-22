@@ -2,4 +2,5 @@
 postgres/postgres_data
 rabbitmq/rabbitmq_data
 dynamodb_streams/volume
+nats/nats_data
 .DS_Store
