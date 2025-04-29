@@ -1,0 +1,13 @@
+input:
+  stdin: {} # "{"key1": "val1", "key2": "val2"}"
+
+pipeline:
+  processors:
+    - mapping: |
+        root = content().trim("\"")
+
+    - mapping: |
+        root = this.key1
+
+output:
+  stdout: {}
