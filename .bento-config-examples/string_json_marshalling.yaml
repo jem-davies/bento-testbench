@@ -1,13 +1,13 @@
 input:
-  stdin: {} # "{"key1": "val1", "key2": "val2"}"
-
+  stdin: {}
+  
 pipeline:
   processors:
+    - bloblang: |
+        root.val =  env("myMap")
     - mapping: |
-        root = content().trim("\"")
-
-    - mapping: |
-        root = this.key1
+        root = this
+        root.new = root.val.trim("\"").parse_json()
 
 output:
   stdout: {}
