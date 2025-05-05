@@ -1,0 +1,13 @@
+input:
+  stdin: {}
+
+pipeline:
+  processors:
+    - meta_test: {}
+
+    - log:
+        message: ${! meta() }
+        level: INFO
+
+output:
+  stdout: {}
