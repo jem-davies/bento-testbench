@@ -5,9 +5,10 @@ pipeline:
   processors:
     - meta_test: {}
 
-    - log:
-        message: ${! meta() }
-        level: INFO
+    - catch: 
+      - log:
+          message: INSIDE CATCH - ${! error() }
+          level: INFO
 
 output:
   stdout: {}

@@ -2,6 +2,7 @@ package processors
 
 import (
 	"context"
+	"errors"
 
 	"github.com/warpstreamlabs/bento/public/service"
 )
@@ -30,9 +31,7 @@ func newMTP(conf *service.ParsedConfig, mgr *service.Resources) (*mtp, error) {
 //------------------------------------------------------------------------------
 
 func (mtp *mtp) Process(ctx context.Context, msg *service.Message) (service.MessageBatch, error) {
-	m := msg.Copy()
-	m.MetaSetMut("test", map[string]string{"key1": "value1", "key2": "value2"})
-	return service.MessageBatch{m}, nil
+	return nil, errors.New("THIS IS AN ERROR")
 }
 
 func (mtp *mtp) Close(ctx context.Context) error {
