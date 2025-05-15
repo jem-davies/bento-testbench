@@ -1,0 +1,23 @@
+input:
+  generate:
+    mapping: |
+        root = {"name": fake("first_name"), "age": random_int(min: 1, max: 99)}
+    interval: 100ms
+    count: 10
+    batch_size: 10
+
+output:
+  sql_insert:
+    driver: sqlite
+    dsn: file:${PWD}/test.db
+    table: test
+    init_statement: |
+        CREATE TABLE IF NOT EXISTS test (
+          name TEXT,
+          age INT,
+          ts TEXT DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'now'))
+        );
+    columns: [name, age]
+    args_mapping: root = [ this.name, this.age ]
+
+
