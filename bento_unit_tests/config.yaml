@@ -1,0 +1,22 @@
+input:
+  stdin: {}
+
+pipeline: 
+  processors:
+    - mapping: |
+        root = this
+
+output:
+  stdout: {}
+
+tests:
+  - name: test_name
+    target_processors: '/pipeline/processors'
+    input_batch:
+      - content: '{"test":{"test":{"hello":"world"}}}'
+    output_batches:
+      -
+        - bloblang: |
+            root = { "hello": "world" } == this
+
+## bento test ./...
