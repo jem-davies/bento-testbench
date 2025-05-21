@@ -17,6 +17,3 @@ output:
   file: 
     path: ./${! now() }_test.zip
     codec: all-bytes
-
-logger:
-  level: DEBUG
