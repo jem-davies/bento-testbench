@@ -1,0 +1,51 @@
+http:
+  enabled: false
+
+input:
+  read_until:
+    check: count("messages") >= 1
+    input:
+      http_client:
+        url: 'http://127.0.0.1:4195/xq'
+        verb: POST
+        rate_limit: rate_limit1
+        timeout: 90s
+        headers:
+          Content-Type: application/json
+
+pipeline:
+  processors:
+    - log: 
+        message: | 
+            ${! content() }
+        level: INFO
+
+    - mapping: | 
+        root = this
+
+output:
+  sql_insert:
+    driver: oracle
+    dsn: oracle://my_user:password@127.0.0.1:1521/FREEPDB1
+    table: test
+    columns: [ TID, AGE, F1 ]
+    args_mapping: |
+      root = [ this.TID, this.AGE, this.F1 ]
+    max_in_flight: 1
+    init_statement: TRUNCATE TABLE test
+    batching:
+      count: 500
+      period: 100ms
+    
+logger:
+  level: DEBUG
+  format: logfmt
+  add_timestamp: true
+  static_fields:
+    '@service': bento
+    
+rate_limit_resources:
+  - label: rate_limit1
+    local:
+      count: 1
+      interval: 1s

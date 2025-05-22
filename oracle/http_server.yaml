@@ -1,0 +1,25 @@
+input:
+  http_server:
+    path: /xq
+    allowed_verbs: [POST]
+    sync_response:
+      status: ${! (@status).string() }
+      headers:
+        Content-Type: application/json
+                    
+pipeline:
+  processors:
+    - mapping: |
+        root = {"AGE":12,"F1":12.66,"TID":"1001"}
+        meta status = "200"             
+    - catch:
+      - mapping: |
+          meta status = "500"
+    - sync_response: {}
+    
+output:
+  stdout:
+    codec: lines
+  processors:
+    - mapping: |
+        root = {"time": "["+ now().ts_format("2006-01-02 15:04:05").ts_strptime("%Y-%m-%d %H:%M:%S") + "]", "data": this, "meta": @}
