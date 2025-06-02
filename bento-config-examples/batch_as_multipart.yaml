@@ -1,0 +1,19 @@
+input:
+  generate:
+    mapping: root = "message"
+    interval: 0s
+    count: 10
+    batch_size: 1
+
+pipeline:
+  processors:
+    - http:
+        url: "http://localhost:8080"
+        verb: POST
+        batch_as_multipart: true
+
+output:
+  stdout: {}
+
+# command-line listener: 
+# while true; do echo -e "HTTP/1.1 200 OK\r\n" | nc -l 127.0.0.1 8080; done

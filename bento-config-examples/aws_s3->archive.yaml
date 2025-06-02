@@ -1,0 +1,58 @@
+# Fetches an image (e.g. 'profile.jpeg') from AWS S3 using the key provided in 
+# the incoming message's metadata, and archives it together with the metadata in
+# file containing two files: 'image.jpeg' and 'metadata.json'. a .zip
+
+input:
+  stdin: {} # {"metadata": {"imageKey": "profile.jpeg"}}
+
+pipeline:
+  processors:
+      # use a branch processor because the aws_s3 will otherwise replace the 
+      # entire message contents
+      - branch: 
+          request_map: |
+              root.metadata = this.metadata 
+
+          processors:
+            - aws_s3:
+                bucket: ${AWS_BUCKET}
+                key: ${!this.metadata.imageKey}
+
+          # use the content.encode("base64") to stop json marshalling fubar'ing
+          # the raw bytes
+          result_map: |
+              root.image = content().encode("base64")
+
+      # rename the root fields in the message data to be the filenames we want
+      # in the .zip archive 
+      - mapping: |
+          root."image.jpeg" = this.image
+          root."metadata.json" = this.metadata
+
+      # split the message into batches of 2 using 'json_map'
+      - unarchive:
+          format: json_map
+
+      # for the message of the batch that contains the image data, decode it 
+      - mapping: |
+          if this.exists("imageKey") { } else { root = this.decode("base64")}
+
+      # archive it back to one message using the metadata value 'archive_key' 
+      # which will be:  
+      # - image.jpeg for the image message
+      # - metadata.json for the metadata message
+      - archive: 
+          format: zip 
+          path: ${! @archive_key }
+
+output:
+  file:
+    path: ./archive.zip
+    codec: all-bytes
+
+# write all bytes to a file ./archive.zip which will look like: 
+# ├── archive
+# │   ├── image.jpeg
+# │   └── metadata.json
+# └── archive.zip
+
