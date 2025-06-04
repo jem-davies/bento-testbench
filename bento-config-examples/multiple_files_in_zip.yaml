@@ -1,0 +1,48 @@
+input:
+  stdin: {}
+
+# {"metadata": {"imageKey": "profile.jpeg"}}
+
+
+pipeline:
+  processors:
+      - branch: 
+          request_map: |
+              root.imageKey = this.metadata.imageKey
+              root.metadata = this.metadata 
+
+          processors:
+            - aws_s3:
+                bucket: bucket-name
+                key: ${!this.metadata.imageKey}
+                credentials:
+                  id: '' 
+                  secret: '' 
+                region: us-east-1
+
+          result_map: |
+              root.image = content().encode("base64")
+
+      - mapping: |
+          root."image.jpeg" = this.image
+          root."metadata.json" = this.metadata
+
+      - unarchive:
+          format: json_map
+
+      - mapping: |
+          if this.exists("imageKey") { } else { root = this.decode("base64")}
+
+      - archive: 
+          format: zip 
+          path: ${! @archive_key }
+
+output:
+  file:
+    path: ./archive.zip
+    codec: all-bytes
+
+# ├── archive
+# │   ├── image.jpeg
+# │   └── metadata.json
+# └── archive.zip
