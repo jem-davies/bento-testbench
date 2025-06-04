@@ -1,0 +1,29 @@
+pipeline:
+  processors:
+    - try:
+      - mapping: |-
+          root.myDate = "Complete nonsense, Holmes"
+      - try:
+          - mapping: |-
+              root.myBadDate = this.myDate.ts_parse("2006-01-02T15:04:05Z07:00").ts_tz("UTC")
+      - catch:
+          - log:
+              level: ERROR
+              message: "Error caught by inner catch ${! error() }" # expected this to be logged and error cleared after child processors complete
+          - mapping: root = "foot"
+    - catch:
+      - log:
+          level: ERROR
+          message: "Error caught by outer catch ${! error() }" # error ends up here instead of the inner catch
+
+logger:
+  level: DEBUG
+
+
+# The try and catch do behave differently to what you would expect if you are thinking Python try/catch (which is something I remember doing when I first saw Benthos)... 
+
+# The try is more like "only do this block of processors if there is no error associated with the message AND if any one of the processors in the block produces an error do not execute any of the remaining processors" 
+
+# The catch block is like "only do this block of processors if there is an error associated with the message, and when you have finished the block, clear the error from the message" 
+
+# So with your config, the second processor in the first try block fails, and the inner catch block is skipped.
