@@ -1,0 +1,11 @@
+input:
+  gcp_spanner_cdc: 
+    spanner_dsn: projects/project-id/instances/instance-id/databases/stream-database
+    spanner_metadata_dsn: projects/project-id/instances/instance-id/databases/stream-database
+    metadata_table: meta_table
+    stream_name: Stream
+
+output:
+  file:
+    path: ./data.txt
+    codec: lines
