@@ -1,0 +1,25 @@
+input:
+  generate:
+    mapping: |
+        root = {"id": random_int(min:0, max:2), "score": random_int(min:100, max:999), "time": timestamp_unix_nano()}
+    interval: 100ms
+    count: 20
+    batch_size: 20
+
+pipeline: 
+  processors: 
+    - log:
+        message: ${! this } 
+
+    - dedupe:
+        cache: dedupe_test
+        key: '${! this.id }'
+        strategy: LIFO 
+
+output: 
+  stdout: {}
+
+cache_resources: 
+- label: dedupe_test
+  memory:
+    default_ttl: 60s
