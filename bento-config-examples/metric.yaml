@@ -1,0 +1,25 @@
+input:
+  generate:
+    mapping: |
+        root = {"hello": "world"}
+
+pipeline:
+  processors:
+    - mapping: |
+        root.hello = this.hello.uppercase()
+
+output:
+  stdout: {}
+
+metrics:
+  mapping: |
+    root = if ![
+      "input_received",
+      "processor_error",
+      "output_sent",
+      "input_latency_ns",
+    ].contains(this) { 
+      deleted() 
+    } else {
+      this.replace_all("_ns", "_micro")
+    }
