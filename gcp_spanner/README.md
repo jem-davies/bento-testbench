@@ -11,6 +11,12 @@ go run . # set's up a database & table - and creates data changes
 
 Config for the gcp_spanner_cdc TODO: create a config for gcp_spanner with the sql components?
 
+```bash
+export SPANNER_EMULATOR_HOST=localhost:9010
+```
+
+Then run: 
+
 ```yaml
 input:
   gcp_spanner_cdc: 

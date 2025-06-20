@@ -12,6 +12,7 @@ output:
   stdout: {}
 
 metrics:
+  json_api: {}
   mapping: |
     root = if ![
       "input_received",
