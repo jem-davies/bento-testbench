@@ -1,0 +1,11 @@
+input:
+  generate:
+    mapping: |
+      root = {"first_name":fake("first_name"), "last_name":fake("last_name"), "age":random_int(min: 0, max: 99)}
+
+output:
+  elasticsearch_v2:
+    urls:
+      - http://localhost:9200
+    index: people
+    id: ${!count("elastic_ids")}-${!timestamp_unix()}
