@@ -1,0 +1,16 @@
+input:
+  kafka:
+    addresses: [localhost:9092]
+    topics: [test-user]
+    consumer_group: test-user-v8
+
+output:
+  gcp_bigquery_write_api:
+    project: test-project
+    dataset: test-dataset
+    table: test_table
+    message_format: protobuf
+    endpoint: 
+      http: http://localhost:9050
+      grpc: 0.0.0.0:9060
+    

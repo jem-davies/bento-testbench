@@ -1,0 +1,20 @@
+input:
+  generate:
+    mapping: |
+        root = {"first_name": fake("first_name"), "last_name": fake("last_name"), "age":random_int(min: 0, max: 99)}
+    interval: 1s
+    count: 0
+    batch_size: 1
+    auto_replay_nacks: true
+
+pipeline:
+  processors:
+    - protobuf:
+        operator: from_json
+        message: testing.Person
+        import_paths: [ schema ]
+
+output:
+  kafka:
+    addresses: [localhost:9092]
+    topic: test-user
