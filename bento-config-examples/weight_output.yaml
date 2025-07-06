@@ -1,0 +1,15 @@
+input:
+  generate:
+    mapping: |
+        root = {"first_name": fake("first_name"), "age": random_int(min: 0, max: 99)}
+
+output:
+  switch:
+    cases: 
+      - check: |
+          random_int(min: 0, max: 9) < 3
+        output:
+            file:
+              path: ./data.txt
+      - output:
+          stdout: {}
