@@ -1,0 +1,12 @@
+input:
+  stdin: {}
+
+pipeline:
+  processors:
+    - mapping:
+        meta ts = now()
+
+output:
+  file:
+    path: ${! [metadata("ts").ts_strftime("%Y"), metadata("ts").ts_strftime("%m"), metadata("ts").ts_strftime("%d"), "data.txt"].filepath_join()}
+    codec: lines
