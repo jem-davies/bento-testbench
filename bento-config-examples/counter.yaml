@@ -1,0 +1,18 @@
+input:
+  generate:
+    mapping: "{}"
+    interval: 100ms
+    count: 100
+
+pipeline:
+  processors: 
+    - mapping: |
+        meta NUMBER = 10
+
+    - mapping: |
+        root.message = if counter() % metadata("NUMBER") == 0 {
+          "message is a " + metadata("NUMBER").string() + " one"
+        }
+
+output:
+  stdout: {}
