@@ -1,0 +1,30 @@
+input:
+  generate:
+    mapping: |
+        root = {"first_name": fake("first_name"), "age": random_int(min: 0, max: 99)}
+
+output:
+  switch:
+    cases: 
+      - check: |
+          random_int(min: 0, max: 9) < 3
+        output:
+            file:
+              path: ./data.txt
+            processors: 
+                - metric:
+                    type: counter
+                    name: file_switch_case
+                    labels: 
+                      case: file
+      - output:
+          stdout: {}
+          processors:
+              - metric:
+                  type: counter
+                  name: stdout_switch_case
+                  labels: 
+                    case: stdout
+                
+metrics:
+  json_api: {}
