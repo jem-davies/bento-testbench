@@ -1,0 +1,16 @@
+input:
+  http_server:
+    path: /post
+    allowed_verbs:
+      - POST
+    timeout: 5s
+    sync_response:
+      status: 404
+
+pipeline:
+  processors:
+    - sleep:
+        duration: 2s
+
+output:
+  sync_response: {}
