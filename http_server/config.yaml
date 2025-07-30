@@ -5,7 +5,7 @@ input:
       - POST
     timeout: 5s
     sync_response:
-      status: 404
+      status: 200
 
 pipeline:
   processors:
