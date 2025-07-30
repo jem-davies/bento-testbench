@@ -1,0 +1,24 @@
+input:
+  http_server:
+    allowed_verbs: [GET, POST]
+    path: /post
+    sync_response:
+      status: ${! metadata("status").string() }
+      headers:
+        Content-Type: application/json
+      metadata_headers:
+        include_prefixes: []
+        include_patterns: []
+
+pipeline:
+  processors:
+    - mapping: |-
+        meta status = if random_int(min:0, max:2) > 1 {404} else {200}
+        
+output:
+  broker:
+    pattern: fan_out
+    outputs:
+      - stdout:
+          codec: lines
+      - sync_response: {}

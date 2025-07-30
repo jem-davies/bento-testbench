@@ -1,0 +1,15 @@
+input:
+  stdin: {}
+
+output:
+  switch:
+    cases:
+      - check: this.status == "ERR"
+        output: 
+          reject: "REJECT STRING"
+      - check: this.status == "OK"
+        output:
+          drop: {}
+  processors:
+    - http:
+        url: http://localhost:4195/post
