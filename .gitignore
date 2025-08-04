@@ -6,3 +6,4 @@ nats/nats_data
 .DS_Store
 sqlite/test.db
 elasticsearch/esdata
+dynamodb/docker/dynamodb/shared-local-instance.db
