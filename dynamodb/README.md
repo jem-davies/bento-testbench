@@ -27,3 +27,5 @@ run bento:
 ```sh
 bento -c config.yaml
 ```
+
+reference: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SettingUp.html
