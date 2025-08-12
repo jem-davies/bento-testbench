@@ -1,0 +1,31 @@
+input:
+  generate:
+    mapping: |
+        root = {"dc_characters": [
+          "Superman",
+          "Batman",
+          "Wonder Woman",
+          "cut",
+          "The Flash",
+          "Green Lantern",
+          "Aquaman",
+          "Cyborg",
+          "Green Arrow",
+          "cut",
+          "cut", 
+          "Martian Manhunter",
+          "Shazam",
+          "Black Canary", 
+          "Hawkman",
+          "Hawkgirl"
+          ]}
+    count: 1
+
+pipeline:
+  processors:
+    - mapping: |
+        let starts = [0].append(this.dc_characters.find_all("cut")).flatten()
+        let ends = $starts.slice(1, $starts.length()).append(this.dc_characters.length()).enumerated().map_each(x -> if x.value == $starts.index(x.index) {x.value + 1} else {x.value}).slice(0,-1).append(this.dc_characters.length())
+
+        root.result = $starts.enumerated().map_each(i -> this.dc_characters.slice(i.value, $ends.index(i.index))).map_each(x -> x.filter(y -> y != "cut"))
+
