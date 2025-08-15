@@ -25,6 +25,6 @@ output:
                   name: stdout_switch_case
                   labels: 
                     case: stdout
-                
+
 metrics:
   json_api: {}
