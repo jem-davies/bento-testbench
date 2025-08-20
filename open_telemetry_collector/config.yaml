@@ -1,0 +1,20 @@
+input:
+  generate:
+    mapping: |
+        root = {"msg": "hello world"}
+
+pipeline:
+  processors:
+    - mapping: |
+        root.msg = this.msg.uppercase()
+
+output:
+  stdout:
+    codec: lines
+
+tracer:
+  open_telemetry_collector:
+    http: 
+      - address: 127.0.0.1:4318
+    # grpc: 
+    #   - address: 127.0.0.1:4317

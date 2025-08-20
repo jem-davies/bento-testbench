@@ -7,3 +7,4 @@ nats/nats_data
 sqlite/test.db
 elasticsearch/esdata
 dynamodb/docker/dynamodb/shared-local-instance.db
+open_telemetry_collector/collector-output.txt
