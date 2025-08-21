@@ -1,0 +1,9 @@
+input: 
+  kafka_franz:
+    seed_brokers: 
+      - localhost:9092
+    topics:
+      - topic_53
+    consumer_group: consumer-dne
+logger:
+  level: ALL
