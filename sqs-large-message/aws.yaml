@@ -1,0 +1,46 @@
+input:
+  label: sqs_extended_client
+
+  aws_sqs:
+    url: https://sqs.<AWS_REGION>.amazonaws.com/<AWS_ACCOUNT_ID>/large-message-queue
+    region: eu-west-2
+
+  processors:
+    - switch: 
+        # check it's a large message:
+        - check: this.0 == "software.amazon.payloadoffloading.PayloadS3Pointer" 
+        # use the aws_s3 processor to download it 
+          processors:
+            - log:
+                level: INFO
+                message: "ITS A LARGE MESSAGE"
+            - aws_s3:
+                bucket: ${! this.1.s3BucketName }
+                key: ${! this.1.s3Key }
+                region: eu-west-2
+                scanner: 
+                  lines: {}
+
+buffer:
+  system_window:
+    timestamp_mapping: root = now()
+    size: 10s
+    allowed_lateness: 5s
+
+pipeline: 
+  processors: 
+    - log:
+        level: INFO
+        message: |
+            before group_by_value: ${! batch_size() }
+
+    - group_by_value: 
+        value: ${! json("file")}
+
+    - log:
+        level: INFO
+        message: |
+            after group_by_value: ${! batch_size() }
+
+output:
+  stdout: {}

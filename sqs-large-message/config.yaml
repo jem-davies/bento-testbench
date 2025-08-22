@@ -1,0 +1,19 @@
+input:
+  file:
+    paths: 
+      - ./input_data/*.txt
+
+buffer:
+  system_window:
+    timestamp_mapping: root = now()
+    size: 1m0s
+    allowed_lateness: 30s
+
+pipeline: 
+  processors: 
+    - log:
+        level: INFO
+        message: ${! batch_size() }
+
+output:
+  stdout: {}
