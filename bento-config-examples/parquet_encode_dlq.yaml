@@ -1,0 +1,27 @@
+input:
+  generate:
+    mapping: |
+        root = {"msg": "hello world", "id": counter()}
+    interval: 1s
+    count: 10
+    batch_size: 10
+    auto_replay_nacks: true
+
+pipeline:
+  processors: 
+    - for_each:
+      - parquet_encode: 
+          schema: 
+            - name: msg 
+              type: BYTE_ARRAY 
+            - name: counter
+              type: INT64
+          default_compression: snappy
+
+output:
+  fallback:
+    - reject_errored:
+        file: 
+            path: ./tmp/data_${!counter()}.txt # non-error output
+
+    - stdout: {} # error'd output
