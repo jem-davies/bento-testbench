@@ -1,0 +1,13 @@
+input:
+  aws_s3: 
+    bucket: mybucket
+    prefix: "events-json-stream"
+    endpoint: http://localhost:9000
+    force_path_style_urls: true
+    region: us-east-1
+    credentials:
+      id: minioadmin
+      secret: minioadmin
+
+output:
+  stdout: {}

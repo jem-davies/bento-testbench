@@ -1,0 +1,12 @@
+input:
+  stdin: {}
+
+output:
+  aws_s3: 
+    bucket: mybucket
+    path: "events-json-stream/${!timestamp_unix_nano()}.jsonl"
+    endpoint: http://localhost:9000
+    force_path_style_urls: true
+    credentials:
+      id: minioadmin
+      secret: minioadmin

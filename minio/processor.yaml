@@ -1,0 +1,17 @@
+input: 
+  stdin: {}
+
+pipeline:
+  processors: 
+    - aws_s3: 
+        bucket: mybucket
+        key: events-json-stream/1756305057033860000.jsonl
+        endpoint: http://localhost:9000
+        force_path_style_urls: true
+        region: us-east-1
+        credentials:
+          id: minioadmin
+          secret: minioadmin
+
+output: 
+  stdout: {}
