@@ -1,0 +1,44 @@
+input: 
+  kafka_franz:
+    seed_brokers:
+      - localhost:9092
+    topics:
+      - topic_53
+    consumer_group: consumer-group
+
+# pipeline:
+#   processors:
+#     - mapping: | 
+#         root = throw("error")
+
+# stdout & file test
+output:
+  fallback:
+    - reject_errored:
+        switch:
+            cases: 
+                - check: content().length() >= 10 
+                  output: 
+                    broker: 
+                        outputs:
+                            - stdout: {}
+                              processors: 
+                                - mapping: |
+                                    root = "STDOUT_1" + content()
+                            - stdout: {}
+                              processors: 
+                                - mapping: |
+                                    root = "STDOUT_2" + content()
+                # - output:
+                #     stdout: {}
+                #     processors:  
+                #       - mapping: |
+                #           root = "STDOUT_3" + content()
+                - output:
+                    reject: "sqs_send_fail"
+            strict_mode: true
+
+    - file:
+        path: ./tmp/dlq.txt
+        codec: lines
+
