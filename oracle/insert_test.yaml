@@ -1,0 +1,17 @@
+input:
+  stdin: {}
+
+pipeline:
+  processors:
+    - sql_insert:
+        driver: oracle
+        dsn: oracle://system:testpass@localhost:58949/FREEPDB1
+        table: footable
+        columns: [ "foo", "bar", "baz" ]
+        args_mapping: 'root = [ this.foo, this.bar.floor(), this.baz ]'
+
+output:
+  stdout: {}
+
+logger:
+  level: ALL
