@@ -1,11 +1,7 @@
 services:
   oracle: 
-    image: gvenzl/oracle-free:latest
-
+    image: gvenzl/oracle-free:slim-faststart
     environment: 
-      ORACLE_RANDOM_PASSWORD: true
-      APP_USER: my_user
-      APP_USER_PASSWORD: password 
-    
+      ORACLE_PASSWORD: testpass
     ports:
       - 1521:1521 
