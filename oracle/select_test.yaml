@@ -1,0 +1,18 @@
+input:
+  stdin: {}
+
+pipeline:
+  processors:
+    - sql_select:
+        driver: oracle
+        dsn: oracle://system:testpass@localhost:1521/FREEPDB1
+        table: footable
+        columns: [ "\"foo\"", "\"bar\"", "\"baz\"" ]
+        where: '"foo" = ?'
+        args_mapping: 'root = [this.id]'
+
+output:
+  stdout: {}
+
+logger:
+  level: ALL

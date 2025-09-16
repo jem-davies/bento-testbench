@@ -6,7 +6,7 @@ input:
 output:
   sql_insert:
     driver: oracle
-    dsn: oracle://my_user:password@127.0.0.1:1521/FREEPDB1
+    dsn: oracle://system:testpass@localhost:58949/FREEPDB1
     table: test
     columns: [ TID, AGE, F1 ]
     args_mapping: |
