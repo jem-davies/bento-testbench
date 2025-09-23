@@ -1,0 +1,16 @@
+input:
+  generate:
+    mapping: |
+        root = {"Artist": "Moby", "SongTitle": "Extreme Ways", "AlbumTitle": "18", "ttl": timestamp_unix() + 120}
+    interval: 1s
+    count: 1
+
+output:
+  aws_dynamodb:
+    table: Music
+    json_map_columns: 
+      Artist: Artist
+      SongTitle: SongTitle
+      AlbumTitle: AlbumTitle
+      ttl: ttl
+    endpoint: http://localhost:8000
