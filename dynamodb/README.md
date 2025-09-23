@@ -40,7 +40,6 @@ aws dynamodb create-table \
     --attribute-definitions \
         AttributeName=Artist,AttributeType=S \
         AttributeName=SongTitle,AttributeType=S \
-        AttributeName=ttl,AttributeType=N \
     --key-schema AttributeName=Artist,KeyType=HASH AttributeName=SongTitle,KeyType=RANGE \
     --billing-mode PAY_PER_REQUEST \
     --table-class STANDARD \
