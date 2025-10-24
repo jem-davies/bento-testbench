@@ -1,0 +1,11 @@
+input:
+  subprocess:
+    name: tail
+    args:
+      - "-f"
+      - "./tail.log"
+    codec: lines
+    restart_on_exit: true
+
+output:
+  stdout: {}
