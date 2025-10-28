@@ -1,0 +1,14 @@
+input:
+  aws_kinesis:
+    streams: 
+        - arn:aws:kinesis:us-east-1:434244666367:stream/bento
+    dynamodb:
+      table: "bento-kinesis-test"
+      create: true
+    checkpoint_limit: 512
+    auto_replay_nacks: true
+    commit_period: 5s
+    start_from_oldest: false
+
+output:
+  stdout: {}

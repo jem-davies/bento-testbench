@@ -1,0 +1,10 @@
+input:
+  generate:
+    mapping: |
+        root = {"name": fake("name"), "id": uuid_v4()}
+    interval: 1s
+
+output:
+  aws_kinesis:
+    stream: arn:aws:kinesis:us-east-1:434244666367:stream/bento
+    partition_key: ${! this.id }
