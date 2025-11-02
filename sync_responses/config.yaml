@@ -1,0 +1,9 @@
+input:
+  http_server:
+    path: /post
+
+output:
+  http_client:
+    url: http://localhost:8080/greeting
+    verb: POST
+    propagate_response: true
