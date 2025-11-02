@@ -1,0 +1,19 @@
+input: 
+  stdin: {}
+  
+# input - {"name":"Alice"} -> routed to stdout
+# input - {"name":"Jem"} -> routed to file
+
+output: 
+  fallback:
+    - reject_errored:
+        stdout: {}
+    - file:
+        path: ./output.txt
+  processors:
+      # - http: ...
+      - mapping: | # this is the check after the http processor 
+          root = this
+          if this.name == "Jem" {
+            root = throw("JEM BAD ERROR")
+          }
