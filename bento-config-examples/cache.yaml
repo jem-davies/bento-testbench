@@ -1,0 +1,33 @@
+input:
+  label: ""
+  generate:
+    mapping: 'root = {"message":{"line":"hello world"}}' 
+    interval: 1s
+
+pipeline:
+  processors:
+    - cache:
+        resource: memory_cache
+        operator: set
+        key: message.version
+        value: v1.0.0
+    - branch:
+        processors:
+          - cache: 
+              resource: memory_cache
+              operator: get 
+              key: message.version
+        result_map: |
+            root.version = content().string()
+
+output:
+  label: ""
+  stdout:
+    codec: lines
+
+cache_resources:
+  - label: memory_cache
+    memory:
+      default_ttl: 120m
+
+

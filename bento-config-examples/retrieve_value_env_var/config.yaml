@@ -1,0 +1,7 @@
+input:
+  generate:
+    mapping: root = "hello ${NAME}"
+    interval: 500ms
+
+output:
+  stdout: {}
