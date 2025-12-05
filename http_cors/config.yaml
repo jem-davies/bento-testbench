@@ -1,0 +1,14 @@
+input:
+  http_server:
+    address: localhost:4196
+    path: /summarize
+    allowed_verbs:
+      - POST
+    timeout: 30s
+    cors:
+      enabled: true
+      allowed_origins:
+        - "http://localhost:8000"
+
+output:
+  stdout: {}

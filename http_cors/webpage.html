@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>POST with Bento + CORS</title>
+</head>
+<body>
+  <h1>Test Bento POST</h1>
+  <button onclick="makePostRequest()">Send POST</button>
+
+  <script>
+    async function makePostRequest() {
+      try {
+        const response = await fetch('http://localhost:4196/summarize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: 'Hello',
+            body: 'This is a test',
+            userId: 1
+          })
+        });
+
+        console.log('Status:', response.status);
+        const text = await response.text();
+        console.log('Body:', text);
+      } catch (err) {
+        console.error('Fetch error:', err);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+input:
+  stdin: {} 
+
+pipeline:
+  processors:
+    - mapping: |
+        root.bucket = this.Records.0.s3.bucket.name
+        root.key = this.Records.0.s3.object.key.unescape_url_query()
+        root.size = this.Records.0.s3.object.size
+        root.event_time = this.Records.0.eventTime
+        root.etag = this.Records.0.s3.object.eTag
+        
+        meta bucket = root.bucket
+        meta key = root.key
+        meta size = root.size
+        meta event_time = root.event_time
+        meta etag = root.etag
+    
+    - mapping: |
+        root = "COPY public.events FROM 's3://" + this.bucket + "/" + this.key + "' IAM_ROLE 'arn:aws:iam::xxxxxx:role/xxxxxx' FORMAT AS JSON 'auto' REGION AS 'us-west-2' EMPTYASNULL BLANKSASNULL IGNOREHEADER 0 MAXERROR 100 TIMEFORMAT 'auto' TRUNCATECOLUMNS ACCEPTINVCHARS GZIP"
+
+output:
+  fallback:
+    - reject_errored:
+        broker:
+          pattern: fan_out_sequential
+          outputs:
+            - sql_raw: # First query - COPY command
+                driver: postgres
+                dsn: postgresql://user:password@localhost:5432/db?sslmode=disable
+                unsafe_dynamic_query: true
+                query: ${! content() }
+                args_mapping: "root = []"
+
+            - sql_raw:  # Second query - Insert manifest
+                driver: postgres
+                dsn: postgresql://user:password@localhost:5432/db?sslmode=disable
+                unsafe_dynamic_query: true
+                query: "INSERT INTO s3_load_manifest (event_time, bucket_name, object_key, object_size, object_etag) VALUES ('${! meta(\"event_time\") }', '${! meta(\"bucket\") }', '${! meta(\"key\") }', ${! meta(\"size\") }, '${! meta(\"etag\") }')"
+                args_mapping: "root = []"
+    
+    - file:  # Failed messages go here
+        path: ./failed-loads-${! timestamp_unix() }.json
+        codec: lines
+      processors:
+        - log:
+            level: ERROR
+            message: "COPY failed, writing to file: ${! error() }"
+
+log:
+  level: ALL

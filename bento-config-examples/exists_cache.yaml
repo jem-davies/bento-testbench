@@ -1,0 +1,42 @@
+input:
+  generate:
+    mapping: |
+        root = {"hello":"world"}
+    interval: 1s
+    count: 1
+
+pipeline:
+  processors:
+    # - cache:
+    #     resource: acache
+    #     operator: add
+    #     key: 'somekey'
+    #     value: '{"hello":"from cache"}'
+    - branch:
+        processors: 
+          - cache:
+              resource: acache
+              operator: get
+              key: 'somekey'
+          - switch:
+            - check: errored() && error().contains("key does not exist")
+              processors:
+                - catch:
+                  - mapping: |
+                      root = this
+                      root.exists = false
+            - check: '!errored()'
+              processors:
+                - mapping: |
+                    root = this
+                    root.exists = true
+        result_map: |
+            root.exists = this.exists
+
+output:
+  stdout: {}
+
+cache_resources:
+  - label: acache
+    memory:
+      compaction_interval: ""
