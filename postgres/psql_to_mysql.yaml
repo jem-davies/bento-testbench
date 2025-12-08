@@ -1,0 +1,22 @@
+input:
+  sql_select:
+    driver: postgres
+    dsn: postgresql://user:password@localhost:5432/db?sslmode=disable
+    table: test_data
+    columns:
+      - first_name
+      - last_name
+      - age
+      - date
+
+pipeline:
+  processors: []
+
+output:
+  sql_insert:
+    driver: mysql
+    dsn: testuser:testpass@tcp(localhost:3306)/testdb
+    table: users
+    columns: ['name', 'created_at']
+    args_mapping: root = [ this.first_name, this.date ]
+
