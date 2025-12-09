@@ -1,0 +1,14 @@
+services:
+  couchbase:
+    image: couchbase:latest
+    container_name: couchbase-test
+    command: ["/opt/couchbase/configure-server.sh"]
+    environment:
+      - CLUSTER_NAME=couchbase
+      - COUCHBASE_ADMINISTRATOR_USERNAME=bento
+      - COUCHBASE_ADMINISTRATOR_PASSWORD=password
+    ports:
+      - 8091:8091
+      - 11210:11210
+    volumes:
+      - /Users/jemdavies/Projects/bento-testbench/couchbase/configure-server.sh:/opt/couchbase/configure-server.sh

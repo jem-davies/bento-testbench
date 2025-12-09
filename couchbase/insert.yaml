@@ -1,0 +1,17 @@
+input:
+  stdin: {}
+
+pipeline:
+  processors:
+    - couchbase:
+        url: couchbase://localhost:11210
+        username: bento
+        password: password
+        bucket: bento-test
+        id: ${! json("id") }
+        operation: insert
+        content: |
+            this.name
+
+output:
+  stdout: {}
