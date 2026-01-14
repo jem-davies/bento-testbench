@@ -1,0 +1,19 @@
+input:
+  sequence:
+    inputs:
+      - file:
+          paths:
+            - ./tmp/data.txt
+      - generate:
+          count: 1
+          mapping: root = {}
+        
+        processors: 
+          - command:
+              name: mv
+              args_mapping: '[ "./tmp/data.txt", "./tmp/data_processed.txt" ]'
+
+output:
+  stdout: {}
+
+
