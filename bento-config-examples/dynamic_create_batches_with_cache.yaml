@@ -1,0 +1,59 @@
+# {"id":"001","type":"start","data":"apple"}
+# {"id":"001","type":"process","data":"banana"}
+# {"id":"001","type":"process","data":"cherry"}
+# {"id":"001","type":"end"}
+
+# {"id":"002","type":"start","data":"spyro"}
+# {"id":"003","type":"start","data":"aubergine"}
+# {"id":"002","type":"process","data":"nestor"}
+# {"id":"003","type":"process","data":"brocoli"}
+# {"id":"003","type":"process","data":"carrot"}
+# {"id":"002","type":"process","data":"gildas"}
+# {"id":"003","type":"end"}
+# {"id":"002","type":"end"}
+
+input:
+  stdin: {}
+
+pipeline:
+  processors:
+    - switch:
+        # start -> create cache 
+        - check: this.type == "start"
+          processors:
+            - cache: 
+                resource: foo
+                operator: set
+                key: ${! this.id }
+                value: ${! [this] }
+            - mutation: |
+                root = deleted()
+        # process -> append to cache
+        - check: this.type == "process"
+          processors:
+            - cache: 
+                resource: foo
+                operator: set
+                key: ${! this.id }
+                value: |
+                    ${! cache_get(resource: "foo", key: this.id).string().parse_json().append(this) }
+            - mutation: |
+                root = deleted()
+        # end -> retrieve
+        - check: this.type == "end"
+          processors:
+            - cache: 
+                resource: foo
+                operator: get
+                key: ${! this.id }
+            - bloblang: |
+                root = this.string().parse_json()
+
+cache_resources:
+  - label: foo
+    memory:
+      default_ttl: 60m
+      compaction_interval: ""
+
+output: 
+  stdout: {}
