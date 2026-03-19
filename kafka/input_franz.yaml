@@ -5,5 +5,6 @@ input:
     topics:
       - topic_53
     consumer_group: consumer-dne
+    
 logger:
   level: ALL

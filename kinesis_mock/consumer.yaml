@@ -1,0 +1,16 @@
+input:
+  aws_kinesis:
+    streams: 
+      - mockstream
+    dynamodb: ## Need to be able to connect this to a different dynamodb instance
+      table: "mockstream"
+      create: true
+    region: "us-east-1"
+    endpoint: "http://localhost:4568"
+    credentials:
+      id: xxxxx
+      secret: xxxxx
+      token: xxxxx
+
+output:
+  stdout: {}

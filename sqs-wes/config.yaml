@@ -1,0 +1,62 @@
+input:
+  file:
+    paths: 
+      - ./input.json
+    scanner:
+      to_the_end: {}
+
+  processors:
+    - mapping: |
+        let event_names = ["customer.event", "cinder.decision_created", "cinder.report_received", "cinder.points_changed"] 
+        root = if this.environment == "acme" && $event_names.contains(this.event_name) {
+            this
+        } else {
+            deleted()
+        }
+
+output:
+  fallback: 
+    - reject_errored:
+        switch:
+          cases: 
+            - check: content().length() >= 256 * 1024
+              output:
+                broker:
+                  outputs:
+                    - aws_s3:
+                        bucket: my-bucket
+                        content_type: application/json
+                        path: ${!"large_sqs_messages/" + this.event_uuid + ".json"}
+                        region: eu-west-2
+                    - aws_sqs:
+                        batching:
+                          byte_size: 921600
+                          count: 10
+                          period: 1s
+                        url: https://sqs.eu-west-2.amazonaws.com/434244666367/bento-test
+                        region: eu-west-2
+                      processors:
+                        # Create pointer message with S3 location
+                        - mapping: |
+                            root = {
+                                    "type": "large_message_pointer",
+                                    "s3_bucket": "my-bucket",
+                                    "s3_key": "large_sqs_messages/" + this.event_uuid + ".json",
+                                    "original_size": content().length(),
+                                    "event_uuid": this.event_uuid,
+                                    "event_name": this.event_name,
+                                    "environment": this.environment,
+                                    "ts_ingestion": this.ts_ingestion
+                                }
+                  pattern: fan_out_sequential
+            - output:    
+                aws_sqs:
+                    batching:
+                      byte_size: 921600
+                      count: 10
+                      period: 1s
+                    url: https://sqs.eu-west-2.amazonaws.com/434244666367/bento-test
+                    region: eu-west-2
+    - aws_sqs:
+        url: https://sqs.eu-west-2.amazonaws.com/434244666367/bento-test-dlq
+        region: eu-west-2

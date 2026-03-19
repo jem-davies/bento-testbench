@@ -1,0 +1,15 @@
+services:
+  dynamodb:
+    command: "-jar DynamoDBLocal.jar -inMemory"
+    image: "amazon/dynamodb-local:latest"
+    working_dir: /home/dynamodblocal
+    ports:
+      - "8000:8000"
+  kinesis-mock:
+    image: "ghcr.io/etspaceman/kinesis-mock:0.5.2"
+    environment:
+      - "LOG_LEVEL=DEBUG"
+      - "INITIALIZE_STREAMS=mockstream"
+    ports:
+      - "4567:4567"
+      - "4568:4568"

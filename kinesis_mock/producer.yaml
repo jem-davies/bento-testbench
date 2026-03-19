@@ -1,0 +1,13 @@
+input:
+  stdin: {}
+
+output:
+  aws_kinesis:
+    stream: mockstream
+    partition_key: ${! json("id")}
+    region: "us-east-1"
+    endpoint: "http://localhost:4568"
+    credentials:
+      id: xxxxx
+      secret: xxxxx
+      token: xxxxx

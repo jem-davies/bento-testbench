@@ -1,0 +1,16 @@
+input:
+  file:
+    paths:
+      - ./input.json
+    scanner: 
+      lines: {}
+    auto_replay_nacks: true
+
+pipeline:
+  processors:
+    - log:
+        message: "FOO"
+
+output:
+  reject: "error"
+    

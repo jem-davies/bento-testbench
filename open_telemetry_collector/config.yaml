@@ -2,10 +2,13 @@ input:
   generate:
     mapping: |
         root = {"msg": "hello world"}
+    count: 1
 
 pipeline:
   processors:
-    - mapping: |
+
+    - label: "mapping_label"
+      mapping: |
         root.msg = this.msg.uppercase()
 
 output:

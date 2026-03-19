@@ -1,0 +1,11 @@
+{
+  "entity_id": "user-13234234",
+  "entity_schema": "conversation",
+  "environment": "acme",
+  "event_name": "cinder.decision_created",
+  "event_uuid": "e331251a-31ed-47d3-b2cb-3c41adea669f",
+  "payload_str": "{\"decision_uuid\":\"e331251a-31ed-47d3-b2cb-3c41adea669f\",\"group_uuids\":[\"e331251a-31ed-47d3-b2cb-3c41adea669f\",\"e331251a-31ed-47d3-b2cb-3c41adea669f\"],\"source\":\"manual\",\"context\":\"job_review\",\"decision_type\":\"queue_review\",\"variant\":\"production\",\"policy_uuids\":[\"e331251a-31ed-47d3-b2cb-3c41adea669f\",\"e331251a-31ed-47d3-b2cb-3c41adea669f\"],\"applied_policy_uuids\":[\"e331251a-31ed-47d3-b2cb-3c41adea669f\"],\"policy_categories_uuids\":[\"e331251a-31ed-47d3-b2cb-3c41adea669f\"],\"enforcement_actions\":[\"test\",\"tag-org-ignored\",\"tag-user-ignored\"],\"queue_slug\":\"test\",\"entity_schema\":\"conversation\",\"entity_id\":\"user-13234234\",\"entity_attributes\":{\"id\":\"user-13234234\",\"integrity_case_id\":\"user-13234234\",\"link\":\"<a href='https://test.org/entity-lookup/user-13234234'>https://test.org/entity-lookup/user-13234234</a>\",\"conversation_id\":\"e331251a-31ed-47d3-b2cb-3c41adea669f\",\"details\":\"unauthorized_use_of_likeness: Ya\",\"product_area\":\"1p\"},\"is_training\":false,\"is_violating\":true,\"has_illegal_policies\":false,\"job_priority_bucket\":\"low\",\"job_priority_value\":5,\"handling_time_ms\":882165,\"is_golden_job\":false,\"is_multi_review\":false,\"is_multi_review_final_decision\":false,\"resolution_time_ms\":107431000,\"met_target_time_to_resolution\":null,\"decision_made_by_uuid\":\"e331251a-31ed-47d3-b2cb-3c41adea669f\",\"report_reasonings\":[\"unauthorized_use_of_likeness\"],\"decision_made_by_workflow_uuid\":null,\"decision_made_by_workflow_rule_uuid\":null,\"job_associated_workflow_uuids\":[],\"job_associated_workflow_rule_uuids\":[]}",
+  "source": "user:e331251a-31ed-47d3-b2cb-3c41adea669f",
+  "ts_event": "2026-02-05T20:21:00.941087Z",
+  "ts_ingestion": "2026-02-05T20:21:02.579344Z"
+}
