@@ -1,0 +1,11 @@
+input:
+  redis_streams:
+    url: tcp://localhost:6379
+    body_key: body
+    streams: [ bar-stream-00 ]
+    limit: 10
+    client_id: client-input-00
+    consumer_group: group-00
+
+output:
+  stdout: {}

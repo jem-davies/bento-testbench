@@ -1,0 +1,16 @@
+input: 
+  stdin: {}
+
+pipeline:
+  processors: 
+    - mapping: |
+        meta name = this.name
+        meta age = this.age
+        meta active = this.active
+        root = ""
+
+output:
+  redis_streams:
+    url: tcp://localhost:6379
+    stream: bar-stream-00
+    body_key: foo
