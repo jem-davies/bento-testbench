@@ -1,0 +1,10 @@
+input:
+  generate:
+    mapping: root = "hello world"
+    interval: 1s
+    count: 1
+
+output:
+  gcp_pubsub:
+    project: axial-studio-438810-m6
+    topic: test
