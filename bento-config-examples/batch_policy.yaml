@@ -1,0 +1,17 @@
+input:
+  generate:
+    mapping: root = "the future is bright"
+    count: 100
+    batch_size: 10
+
+output:
+  broker:
+    pattern: fan_out_sequential
+    batching:
+      count: 50 ## cannot break down bigger batches
+      processors:
+        - mapping: |
+            root.doc = content().string()
+            root.count = batch_size()
+    outputs:
+      - stdout: {}
