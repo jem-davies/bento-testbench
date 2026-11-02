@@ -1,0 +1,24 @@
+input:
+  kafka:
+    addresses: [localhost:9092]
+    topics: [topic_53]
+    consumer_group: sync_false
+    checkpoint_limit: 1
+    auto_replay_nacks: false
+
+pipeline: 
+  processors:
+    - mutation: |
+        root = content().string() + " offset=" + @kafka_offset.string()
+        
+    - mutation: |
+        if @kafka_offset.number() == 30 {
+          root = throw("reached kafka_offset 30")
+        }
+
+output:
+  reject_errored:
+    stdout: {}
+
+logger: 
+  level: DEBUG

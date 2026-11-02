@@ -1,0 +1,10 @@
+input:
+  generate:
+    mapping: root = "hello world"
+    interval: 1ms
+    count: 100
+
+output:
+  kafka:
+    addresses: [localhost:9092]
+    topic: topic_55
